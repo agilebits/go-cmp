@@ -1,6 +1,6 @@
 // Copyright 2017, The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE.md file.
+// license that can be found in the LICENSE file.
 
 package cmp_test
 
@@ -1276,6 +1276,17 @@ using the AllowUnexported option.`, "\n"),
 		y:         MyComposite{},
 		wantEqual: false,
 		reason:    "batched diffing for empty slices and nil slices",
+	}, {
+		label: label + "/LargeMapKey",
+		x: map[*[]byte]int{func() *[]byte {
+			b := make([]byte, 1<<20, 1<<20)
+			return &b
+		}(): 0},
+		y: map[*[]byte]int{func() *[]byte {
+			b := make([]byte, 1<<20, 1<<20)
+			return &b
+		}(): 0},
+		reason: "printing map keys should have some verbosity limit imposed",
 	}}
 }
 
